@@ -1,0 +1,195 @@
+// ========================= \\
+|| BOZELS © 2012 BART MIDDAG ||
+\\ ========================= //
+
+	"Bozels hebben maar één doel. Nee, dat is niet waar, maar ze hebben wel maar één levensmissie en dat is om al hun
+	 doelen te vernietigen. Het is jouw taak om hen daarbij te helpen." ~ Opgave
+	 
+0. VOOR U BEGINT
+================
+	* Dit bestand is best leesbaar met Notepad++.
+	* Voor een korte versie van dit bestand, lees enkel puntje 2.
+	* Vergeet niet het geluid aan te zetten als u in het project "de magische knop" gebruikt...
+
+1. HET SPEL
+===========
+	[ BASIS-FEATURES ]
+		* Gooi Bozels
+		* Raak doelen
+		* Gebruik superkrachten
+		* Verander de instellingen
+		* Gooi nog wat Bozels
+		* Alles wat in de opgave stond
+	[ EXTRA FEATURES ]
+		* Zet de instellingen terug op hun normale waarden.
+		* Tweetalig: Nederlands en Engels ( past zich aan aan de taal van Java op je OS )
+		* Mooie graphics ( gebruik de magische knop )
+		* Twee superleuke achtergronden ( gebruik de magische knop )
+		* Ongelofelijk geluid ( gebruik de magische knop )
+		* Gratis slowdown voor zwakke PC's ( gebruik de magische knop )
+	
+
+2. WEGWIJS IN DE BRONCODE
+=========================
+	De broncode is over het algemeen zeer duidelijk. De Engelse commentaar zou het nog duidelijker moeten maken.
+	Ik heb gebruik gemaakt van het Model-View-Controller-principe.
+	
+	[ 2.1 MODELLEN ]
+		Alle klassen in de package "bozels.models" zijn modellen.
+		Het belangrijkste model is het hoofdmodel ( MainModel.java ). Dit houdt de belangrijkste waarden van het spel bij
+		en maakt ook andere modellen aan, zoals het configuratiemodel ( ConfigModel.java ), dat vooral de hoofdinstellingen
+		( zoals zwaartekracht, enz. ) opslaat. Hierin worden ook de verschillende elementmodellen aangemaakt. Elk van deze
+		modellen houdt informatie bij over een bepaald type element ( Ijsblok, groot doel, rode bozel, enz. ).
+		Er is ook een bonusmodel ( BonusModel.java ) dat zich bezighoudt met de extra features die horen bij "de magische knop".
+		
+	[ 2.2 VIEWS ]
+		De verschillende views worden aangemaakt met de MainGUIManager ( MainGUIManager.java ).
+		Het spelvenster ( GameWindow.java ) is de belangrijkste view. Dit houdt zich bezig met het tekenen van de verschillende
+		elementen, maar ook met het tekenen van de omgeving als "de magische knop" geactiveerd is.
+		Alle klassen in de package "bozels.gui" zijn ook views. Dit zijn vooral de verschillende tabs die je kan selecteren
+		onderaan het scherm.
+		
+	[ 2.3 CONTROLLERS ]
+		De views zijn samengevoegd met de controllers. Zo is het spelvenster ( GameWindow.java ) ook een MouseListener waarmee
+		het spel reageert op de muis. Ook de GUI is gekoppeld aan Actions die het spel besturen.
+		De tekstvelden ( JConfigTextField.java ) in de tabs onderaan het scherm zijn uitbreidingen van JTextField. Het speciale
+		hieraan is dat de get-en setmethoden en het model doorgegeven worden aan deze tekstvelden, zodat er gemakkelijk
+		verschillende objecten van deze ene klasse kunnen gemaakt worden in plaats van verschillende binnenklassen te gebruiken.
+		
+	Een ( in de lessen onbesproken ) functie van Java die ik af en toe gebruikt heb is "synchronized". Dit zorgt er vooral voor
+	dat de "gesynchroniseerde" code uitgevoerd wordt vooraleer er andere "gesynchroniseerde" code in hetzelfde object uitgevoerd
+	kan worden. Dit beveiligt onder andere tegen ConcurrentModificationExceptions.
+	
+
+3. ALGEMENE STRUCTUUR
+=====================
+	[ bozels ]									[ De hoofdpackage ]
+	|   Bozels.java								De main class
+	|   ExplosionRayCastCallback.java			Houdt het dichtste contactpunt bij bij het Raycasten
+	|   game.properties							Engelstalige strings
+	|   GameWindow.java							Het spelvenster ( zie 2.2 )
+	|   game_nl.properties						Nederlandstalige strings
+	|   MainGUIManager.java						Maakt de GUI aan
+	|   MusicFader.java							Een workaround voor het probleem dat het veranderen van volume van audio niet
+	|											onmiddellijk werkt: Fade in / fade out voor de audio
+	|   ReadXML.java							De XML-lezer voor levels
+	|   Simulation.java							De simulatielus
+	|   
+	+--- [ audio ]								[ De geluidspackage ]
+	|       AmbienceCrickets.wav				Omgevingsgeluid: Krekels in de nacht
+	|       AmbienceSea.wav						Omgevingsgeluid: Golven
+	|       CollisionConcrete.wav				Botsingsgeluid: Beton
+	|       CollisionMetal.wav					Botsingsgeluid: Metaal
+	|       CollisionTarget.wav					Botsingsgeluid: Doel
+	|       CollisionWood.wav					Botsingsgeluid: Hout
+	|       JingleGameOver.wav					Jingle: Game Over
+	|       JingleVictory.wav					Jingle: Overwinning
+	|       MusicDrums.wav						Muziek: Drums
+	|       MusicMelody.wav						Muziek: Melodie
+	|       MusicPiano.wav						Muziek: Piano
+	|       ScreamGirly.wav						Bozelschreeuw: Grappige gil
+	|       ScreamTarzan.wav					Bozelschreeuw: Tarzan, uit de originele film
+	|       ScreamWilhelm.wav					Bozelschreeuw: De overbekende Wilhelm-schreeuw
+	|       SoundBoost.wav						Superkrachtgeluid: Snelheidsboost ( gele bozel )
+	|       SoundExplosion.wav					Superkrachtgeluid: Explosie ( witte bozel )
+	|       
+	+--- [ elements ]							[ De package met de verschillende elementen ]
+	|       BigTarget.java						Doel: Groot
+	|       Block.java							BLOK ( ABSTRACT )
+	|       BlueBozel.java						Bozel: Blauw
+	|       Bozel.java							BOZEL ( ABSTRACT )
+	|       ConcreteBlock.java					Blok: Beton
+	|       Element.java						ELEMENT ( INTERFACE )
+	|       GroundBlock.java					Blok: Grond
+	|       IceBlock.java						Blok: IJs
+	|       MetalBlock.java						Blok: Metaal
+	|       RedBozel.java						Bozel: Rood
+	|       SmallTarget.java					Doel: Klein
+	|       SolidBlock.java						Blok: Vast
+	|       Target.java							DOEL ( ABSTRACT )
+	|       WhiteBozel.java						Bozel: Wit
+	|       WoodenBlock.java					Blok: Hout
+	|       YellowBozel.java					Bozel: Geel
+	|       
+	+--- [ factories ]							[ De Factory-package ]
+	|       BigTargetFactory.java				Doelfactory: Groot
+	|       BlockFactory.java					BLOKFACTORY ( ABSTRACT )
+	|       BlueBozelFactory.java				Bozelfactory: Blauw
+	|       BozelFactory.java					BOZELFACTORY ( ABSTRACT )
+	|       ConcreteBlockFactory.java			Blokfactory: Beton
+	|       IceBlockFactory.java				Blokfactory: IJs
+	|       MetalBlockFactory.java				Blokfactory: Metaal
+	|       RedBozelFactory.java				Bozelfactory: Rood
+	|       SmallTargetFactory.java				Doelfactory: Klein
+	|       SolidBlockFactory.java				Blokfactory: Vast
+	|       TargetFactory.java					DOELFACTORY ( ABSTRACT )
+	|       WhiteBozelFactory.java				Bozelfactory: Wit
+	|       WoodenBlockFactory.java				Blokfactory: Hout
+	|       YellowBozelFactory.java				Bozelfactory: Geel
+	|       
+	+--- [ gui ]								[ De GUI-package ]
+	|       BozelsPanel.java					De tab "Bozels"
+	|       JColorButton.java					De kleur-toets, laat toe om kleur te kiezen
+	|       JConfigTextField.java				Een tekstveld dat nakijkt of de waarde ligt tussen een minimum-en maximumwaarde
+	|											en dan een gegeven model aanpast met gegeven get-en setmethoden
+	|       JFragileCheckBox.java				Een checkbox die de breekbaarheidswaarde van een gegeven elementmodel bestuurt
+	|       MainPanel.java						De tab "Algemeen"
+	|       MaterialsPanel.java					De tab "Materialen"
+	|       NamedColor.java						Een kleur gekoppeld aan een string, voor de materialenlijst
+	|       NamedColorCellRenderer.java			Een cell renderer die de kleur en de string samen in één cel tekent
+	|       SquareIcon.java						Het vierkantige gekleurde icoon dat hoort bij de NamedColor
+	|       TabPanel.java						Het paneel met de tabs en de knoppen linksonder
+	|       TargetsPanel.java					De tab "Doelen"
+	|       
+	+--- [ images ]								[ De afbeeldingenpackage ]
+	|       BigBlackShadow.png					De zwarte schaduw links zichtbaar in de nacht
+	|       Catapult.png						De katapult
+	|       Cloud1.png							Wolk 1
+	|       Cloud2.png							Wolk 2
+	|       Cloud3.png							Wolk 3
+	|       Cloud4.png							Wolk 4
+	|       Explosion.png						Explosie
+	|       Icon.png							Het icoon van het venster
+	|       Logo.png							Het logo van Bozels
+	|       Moon.png							De maan
+	|       MoonSwirl.png						Het draaiende maanlicht
+	|       Mount1.png							Bergachtige achtergrond: ver
+	|       Mount2.png							Bergachtige achtergrond: midden
+	|       Mount3.png							Bergachtige achtergrond: dichtbij
+	|       PirateShip.png						Het piratenschip
+	|       Sea.png								De zee achter de bergen tijdens de nacht
+	|       Stars.png							De draaiende sterrenhemel
+	|       Waves.png							De golven
+	|       
+	\--- [ models ]								[ De modellenpackage ]
+			BigTargetModel.java					Elementmodel: Doel: Groot
+			BlueBozelModel.java					Elementmodel: Bozel: Blauw
+			BonusModel.java						BONUSMODEL: zorgt voor de afbeeldingen en de muziek
+			ConcreteBlockModel.java				Elementmodel: Blok: Beton
+			ConfigModel.java					CONFIGURATIEMODEL: houdt instelbare instellingen ( bv. zwaartekracht ) bij
+			ElementModel.java					ELEMENTMODEL ( ABSTRACT )
+			IceBlockModel.java					Elementmodel: Blok: IJs
+			MainModel.java						HOOFDMODEL: houdt hoofdprogrammavariabelen ( bv. lijst van alle elementen ) bij
+			MetalBlockModel.java				Elementmodel: Blok: Metaal
+			Model.java							MODEL ( ABSTRACT ): Bijlage bij de cursus Programmeren 2
+			RedBozelModel.java					Elementmodel: Bozel: Rood
+			SmallTargetModel.java				Elementmodel: Doel: Klein
+			SolidBlockModel.java				Elementmodel: Blok: Vast
+			WhiteBozelModel.java				Elementmodel: Bozel: Wit
+			WoodenBlockModel.java				Elementmodel: Blok: Hout
+			YellowBozelModel.java				Elementmodel: Bozel: Geel
+			
+	Meer informatie over de meeste methodes is te vinden in de Javadoc en de commentaar in de code zelf.
+
+
+4. CREDITS
+==========
+	* Project, les en assistentie - Kris Coolsaet, Davy Hollevoet, Nico Van Cleemput
+	* Programma, afbeeldingen en muziek - Bart Middag
+	* Originele muziek ( Angry Birds Theme ) - Ari Pulkkinen
+	* Origineel idee - Rovio Entertainment
+	* Box2D - Erin Catto
+	* JBox2D - Daniel Murphy
+	
+	Bedankt, iedereen!
+
